@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="es" data-bs-theme="light">
+  <head>
+    <!-- Metadatos Esenciales -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="HabitTracker: Rastreador de hábitos diario accesible, moderno y responsivo con recordatorios nativos y seguimiento de progreso."
+    />
+    <title>HabitTracker - Rastreador de Hábitos y Recordatorios</title>
+
+    <!-- Bootstrap 5.3.8 por CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    />
+    <!-- Hoja de estilos personalizada cargada DESPUÉS de Bootstrap (Look & Feel Fase 1 + WCAG AA >= 4.5:1) -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-wrapper d-flex flex-column min-vh-100">
+      <!-- Landmark Semántico: <header> -->
+      <header class="app-header border-bottom">
+        <!-- Landmark Semántico: <nav> con etiqueta accesible -->
+        <nav
+          class="container py-3 d-flex flex-wrap align-items-center justify-content-between gap-3"
+          aria-label="Navegación y controles principales de la aplicación"
+        >
+          <a
+            href="#"
+            class="brand d-flex align-items-center gap-3 text-decoration-none"
+            aria-label="Ir al inicio de HabitTracker"
+          >
+            <span
+              class="brand-icon d-inline-flex align-items-center justify-content-center"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                role="img"
+                aria-label="Icono de verificación de hábitos"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </span>
+            <span class="brand-info d-flex flex-column">
+              <strong class="brand-title fs-5">HabitTracker</strong>
+              <small class="brand-subtitle">Construye tu mejor versión</small>
+            </span>
+          </a>
+
+          <div class="header-actions d-flex flex-wrap align-items-center gap-2">
+            <button
+              id="btn-tema"
+              class="btn btn-secondary d-inline-flex align-items-center gap-2"
+              type="button"
+              aria-pressed="false"
+              title="Alternar entre tema claro y oscuro"
+            >
+              <span id="icono-tema" aria-hidden="true">🌙</span>
+              <span id="txt-tema-btn">Modo oscuro</span>
+            </button>
+
+            <button
+              id="btn-notificaciones"
+              class="btn btn-primary d-inline-flex align-items-center gap-2"
+              type="button"
+              aria-expanded="false"
+              aria-controls="contenedor-toasts"
+              title="Activar o probar recordatorios nativos"
+            >
+              <span
+                class="notif-indicator"
+                id="notif-indicator"
+                aria-hidden="true"
+              ></span>
+              <svg
+                class="icon-btn"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span id="txt-notif-btn">Activar Notificaciones</span>
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      <!-- Landmark Semántico: <main> para el contenido medular -->
+      <main class="app-main container my-4 flex-grow-1">
+        <!-- Jerarquía de Encabezados: <h1> único y visible con UX natural -->
+        <header class="mb-4">
+          <h1 class="h3 fw-bold mb-1">
+            Panel de Seguimiento de Hábitos y Recordatorios
+          </h1>
+          <p class="texto-secundario mb-0">
+            Organiza tu rutina diaria, cumple tus metas y construye constancia
+            un día a la vez.
+          </p>
+        </header>
+
+        <!-- Alerta global de estado -->
+        <div
+          id="alerta-api"
+          class="alert alert-warning shadow-sm mb-4"
+          role="alert"
+          hidden
+        ></div>
+
+        <!-- Landmark Semántico: <section> para Métricas con Cuadrícula Responsiva Bootstrap -->
+        <section
+          class="dashboard-stats mb-4"
+          aria-labelledby="titulo-estadisticas"
+        >
+          <h2 id="titulo-estadisticas" class="visually-hidden">
+            Panel de Métricas y Progreso Diario
+          </h2>
+
+          <div class="row g-3">
+            <!-- Tarjeta 1: Progreso Diario -->
+            <div class="col-12 col-md-6 col-lg-4">
+              <article class="card shadow-sm h-100 stat-card">
+                <div class="card-body d-flex flex-column justify-content-between">
+                  <header
+                    class="d-flex align-items-center justify-content-between mb-2"
+                  >
+                    <span class="stat-label fw-bold text-uppercase"
+                      >Progreso Diario</span
+                    >
+                    <span class="stat-icon icon-emerald" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m9 12 2 2 4-4"></path>
+                      </svg>
+                    </span>
+                  </header>
+                  <div
+                    class="d-flex align-items-baseline justify-content-between mb-2"
+                  >
+                    <span class="stat-number fw-bold" id="porcentaje-progreso"
+                      >0%</span
+                    >
+                    <span class="stat-subtext" id="progreso-detalle"
+                      >0 de 0 completados</span
+                    >
+                  </div>
+                  <div
+                    class="progress progress-track"
+                    role="progressbar"
+                    aria-valuenow="0"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-labelledby="porcentaje-progreso"
+                    id="progress-bar-aria"
+                  >
+                    <div
+                      class="progress-bar progress-fill"
+                      id="progress-fill"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <!-- Tarjeta 2: Racha Activa -->
+            <div class="col-12 col-md-6 col-lg-4">
+              <article class="card shadow-sm h-100 stat-card">
+                <div class="card-body d-flex flex-column justify-content-between">
+                  <header
+                    class="d-flex align-items-center justify-content-between mb-2"
+                  >
+                    <span class="stat-label fw-bold text-uppercase"
+                      >Racha Activa</span
+                    >
+                    <span class="stat-icon icon-amber" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
+                        ></path>
+                      </svg>
+                    </span>
+                  </header>
+                  <div
+                    class="d-flex align-items-baseline justify-content-between"
+                  >
+                    <span class="stat-number fw-bold" id="racha-total"
+                      >0 días</span
+                    >
+                    <span class="stat-subtext"
+                      >¡Mantén la constancia diaria!</span
+                    >
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <!-- Tarjeta 3: Total Hábitos (Ícono SVG de lista de verificación/capas) -->
+            <div class="col-12 col-md-12 col-lg-4">
+              <article class="card shadow-sm h-100 stat-card">
+                <div class="card-body d-flex flex-column justify-content-between">
+                  <header
+                    class="d-flex align-items-center justify-content-between mb-2"
+                  >
+                    <span class="stat-label fw-bold text-uppercase"
+                      >Total Hábitos</span
+                    >
+                    <span class="stat-icon icon-indigo" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path
+                          d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                        ></path>
+                      </svg>
+                    </span>
+                  </header>
+                  <div
+                    class="d-flex align-items-baseline justify-content-between"
+                  >
+                    <span class="stat-number fw-bold" id="total-habitos-count"
+                      >0</span
+                    >
+                    <span class="stat-subtext" id="pendientes-detalle"
+                      >0 pendientes hoy</span
+                    >
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- Landmark Semántico: <aside> para Consejo de Productividad del Día e imagen con loading="lazy" -->
+        <aside
+          class="card shadow-sm aside-consejo mb-4"
+          aria-labelledby="titulo-consejo"
+        >
+          <div
+            class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3 py-3"
+          >
+            <div class="d-flex align-items-center gap-3">
+              <img
+                src="insignia-habitos.svg"
+                alt="Insignia de constancia diaria HabitTracker"
+                width="44"
+                height="44"
+                loading="lazy"
+                class="flex-shrink-0 rounded-circle"
+              />
+              <div>
+                <h2
+                  id="titulo-consejo"
+                  class="consejo-titulo text-uppercase fw-bold mb-1"
+                >
+                  💡 Consejo de Productividad del Día
+                </h2>
+                <p id="texto-consejo" class="consejo-texto mb-0">
+                  Cargando sugerencia del día...
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              id="btn-nuevo-consejo"
+              class="btn btn-secondary btn-sm fw-semibold"
+            >
+              Siguiente consejo
+            </button>
+          </div>
+        </aside>
+
+        <!-- Fila Principal: Tarjeta de Perfil ("Tu Perfil Diario") + Formulario de Hábitos -->
+        <div class="row g-4 mb-4">
+          <!-- Columna 1: "Tu Perfil Diario" -->
+          <div class="col-12 col-lg-5">
+            <section
+              class="card shadow-sm h-100 panel-usuario"
+              aria-labelledby="titulo-mi-panel"
+            >
+              <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                  <header
+                    class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3"
+                  >
+                    <h2 id="titulo-mi-panel" class="h5 fw-bold mb-0">
+                      👤 Tu Perfil Diario
+                    </h2>
+                    <span
+                      id="contador-visitas"
+                      class="badge badge-visitas"
+                      aria-live="polite"
+                    >
+                      Sesión activa • Vista #1
+                    </span>
+                  </header>
+
+                  <!-- Saludo dinámico protagonista -->
+                  <div
+                    id="saludo-usuario"
+                    class="saludo-protagonista mb-3"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    ¡Hola! Personaliza tu perfil para comenzar. 👋
+                  </div>
+
+                  <!-- Formulario compacto para personalizar nombre -->
+                  <form id="form-usuario" class="mb-2" novalidate>
+                    <label
+                      for="input-nombre-usuario"
+                      class="form-label small fw-semibold mb-1"
+                      >Tu nombre o apodo</label
+                    >
+                    <div class="d-flex flex-wrap gap-2">
+                      <input
+                        type="text"
+                        id="input-nombre-usuario"
+                        class="form-control form-control-sm flex-grow-1"
+                        placeholder="Ej: David, Ana..."
+                        maxlength="50"
+                        aria-describedby="ayuda-nombre-usuario"
+                        autocomplete="given-name"
+                      />
+                      <button
+                        type="submit"
+                        id="btn-guardar-nombre"
+                        class="btn btn-primary btn-sm px-3"
+                      >
+                        Guardar
+                      </button>
+                    </div>
+                    <small
+                      id="ayuda-nombre-usuario"
+                      class="form-text texto-secundario d-block mt-1"
+                    >
+                      Personaliza tu espacio de seguimiento diario.
+                    </small>
+                  </form>
+                </div>
+
+                <!-- Bloque discreto inferior de Privacidad y botón "Olvidar mis datos" -->
+                <div class="privacidad-box border-top pt-3 mt-3">
+                  <p class="small text-body-secondary aviso-privacidad mb-2">
+                    Privacidad: tus preferencias (nombre, tema y progreso local)
+                    se guardan únicamente en este navegador.
+                  </p>
+
+                  <div
+                    id="alerta-privacidad"
+                    class="alert alert-warning py-2 px-3 small mb-2"
+                    role="alert"
+                    hidden
+                  ></div>
+
+                  <div class="d-flex flex-wrap align-items-center">
+                    <button
+                      type="button"
+                      id="btn-olvidar"
+                      class="btn btn-danger btn-sm"
+                    >
+                      Olvidar mis datos
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Columna 2: Formulario de Registro de Hábitos -->
+          <div class="col-12 col-lg-7">
+            <section
+              class="card shadow-sm h-100 card-formulario"
+              aria-labelledby="titulo-crear"
+            >
+              <div class="card-body">
+                <header class="mb-3">
+                  <h2
+                    id="titulo-crear"
+                    class="h5 fw-bold d-flex align-items-center gap-2 mb-1"
+                  >
+                    <svg
+                      class="h2-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      aria-hidden="true"
+                    >
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Registrar Nuevo Hábito
+                  </h2>
+                  <p class="texto-secundario small mb-0">
+                    Establece una acción clara y alcanzable para consolidar tu
+                    rutina.
+                  </p>
+                </header>
+
+                <!-- Alerta de validación o éxito del formulario -->
+                <div
+                  id="alerta-formulario"
+                  class="alert alert-warning py-2 px-3 small mb-3"
+                  role="alert"
+                  hidden
+                ></div>
+
+                <form id="form-habito" class="row g-3" novalidate>
+                  <!-- Campo Nombre del Hábito -->
+                  <div class="col-12">
+                    <label for="nombre-habito" class="form-label fw-semibold">
+                      Nombre del Hábito
+                      <span class="req" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="nombre-habito"
+                      class="form-control"
+                      required
+                      minlength="3"
+                      maxlength="80"
+                      aria-required="true"
+                      aria-describedby="ayuda-nombre-habito"
+                      placeholder="Ej: Beber 2L de agua, Meditar 10 minutos..."
+                      autocomplete="off"
+                    />
+                    <small
+                      class="form-text texto-secundario"
+                      id="ayuda-nombre-habito"
+                    >
+                      Define una acción concreta para cumplir durante el día.
+                    </small>
+                  </div>
+
+                  <!-- Selector de Categoría -->
+                  <div class="col-12 col-md-6">
+                    <label
+                      for="categoria-habito"
+                      class="form-label fw-semibold"
+                    >
+                      Categoría
+                    </label>
+                    <select
+                      id="categoria-habito"
+                      class="form-select"
+                      aria-describedby="ayuda-cat-habito"
+                    >
+                      <option value="salud">💧 Salud y Bienestar</option>
+                      <option value="mente">🧠 Mente y Aprendizaje</option>
+                      <option value="productividad">⚡ Productividad</option>
+                      <option value="deporte">🏃 Ejercicio Físico</option>
+                      <option value="finanzas">💰 Finanzas</option>
+                      <option value="general">⭐ General</option>
+                    </select>
+                    <small
+                      class="form-text texto-secundario"
+                      id="ayuda-cat-habito"
+                    >
+                      Clasifica el hábito para organizar tus metas.
+                    </small>
+                  </div>
+
+                  <!-- Selector de Hora con Recordatorio -->
+                  <div class="col-12 col-md-6">
+                    <label
+                      for="hora-recordatorio"
+                      class="form-label fw-semibold"
+                    >
+                      Hora de Recordatorio (Opcional)
+                    </label>
+                    <input
+                      type="time"
+                      id="hora-recordatorio"
+                      class="form-control"
+                      value="08:00"
+                      aria-describedby="ayuda-hora-habito"
+                    />
+                    <small
+                      class="form-text texto-secundario"
+                      id="ayuda-hora-habito"
+                    >
+                      Hora para disparar la notificación nativa.
+                    </small>
+                  </div>
+
+                  <!-- Botón de Envío con estado de carga -->
+                  <div class="col-12 d-flex justify-content-end mt-3">
+                    <button
+                      type="submit"
+                      class="btn btn-primary d-inline-flex align-items-center gap-2 px-4"
+                      id="btn-submit-habito"
+                    >
+                      <svg
+                        class="btn-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        aria-hidden="true"
+                      >
+                        <path d="M12 5v14M5 12h14" />
+                      </svg>
+                      <span id="txt-submit-habito">Agregar Hábito</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- Landmark Semántico: <section> para Listado de Hábitos -->
+        <section class="seccion-habitos" aria-labelledby="titulo-habitos">
+          <header
+            class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3"
+          >
+            <div>
+              <h2 id="titulo-habitos" class="h4 fw-bold mb-1">
+                Tus Hábitos Diarios
+              </h2>
+              <p class="texto-secundario small mb-0">
+                Gestiona tus metas del día, márcalas como realizadas y aumenta
+                tu racha.
+              </p>
+            </div>
+
+            <!-- Filtros tipo Píldora (Segmented Control) accesibles mediante rol tablist -->
+            <div
+              class="filtros-container d-inline-flex flex-wrap align-items-center gap-1"
+              role="tablist"
+              aria-label="Filtrar hábitos por estado"
+            >
+              <button
+                type="button"
+                class="filtro-btn activo"
+                data-filtro="todos"
+                role="tab"
+                aria-selected="true"
+                id="tab-todos"
+                aria-controls="contenedor-habitos"
+              >
+                <span>Todos</span>
+                <span class="contador-badge" id="badge-todos">0</span>
+              </button>
+              <button
+                type="button"
+                class="filtro-btn"
+                data-filtro="pendientes"
+                role="tab"
+                aria-selected="false"
+                id="tab-pendientes"
+                aria-controls="contenedor-habitos"
+              >
+                <span>Pendientes</span>
+                <span class="contador-badge" id="badge-pendientes">0</span>
+              </button>
+              <button
+                type="button"
+                class="filtro-btn"
+                data-filtro="completados"
+                role="tab"
+                aria-selected="false"
+                id="tab-completados"
+                aria-controls="contenedor-habitos"
+              >
+                <span>Completados</span>
+                <span class="contador-badge" id="badge-completados">0</span>
+              </button>
+            </div>
+          </header>
+
+          <!-- Listado Dinámico de Hábitos en Cuadrícula Responsiva con Región Viva para Accesibilidad (aria-live) -->
+          <ul
+            id="contenedor-habitos"
+            class="row g-3 list-unstyled mb-0"
+            aria-live="polite"
+            role="region"
+            aria-labelledby="titulo-habitos"
+          >
+            <!-- Los hábitos se cargan de forma reactiva con JS mediante delegación de eventos -->
+          </ul>
+
+          <!-- Estado Vacío Semántico usando el atributo nativo hidden -->
+          <div
+            id="estado-vacio"
+            class="card shadow-sm text-center p-5 mt-3 estado-vacio"
+            hidden
+          >
+            <div class="estado-vacio-icono mx-auto mb-3" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="h5 fw-bold">¡Todo al día!</h3>
+            <p id="mensaje-vacio" class="texto-secundario mb-0">
+              No hay hábitos en esta sección. Añade uno nuevo para comenzar.
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <!-- Landmark Semántico: <footer> -->
+      <footer class="app-footer border-top py-3 mt-auto">
+        <div
+          class="container d-flex flex-wrap align-items-center justify-content-between gap-2"
+        >
+          <p class="mb-0 small texto-secundario">
+            &copy; 2026 <strong>HabitTracker</strong> • Construido con
+            estándares web modernos y accesibles.
+          </p>
+          <span class="badge badge-universidad">Unisangil</span>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Contenedor flotante de avisos Toast para lectores de pantalla e interfaz -->
+    <div
+      id="contenedor-toasts"
+      class="contenedor-toasts"
+      aria-live="polite"
+      role="status"
+    ></div>
+
+    <!-- Carga no bloqueante de Scripts con type="module" (comportamiento defer nativo) -->
+    <script type="module" src="app.mjs"></script>
+  </body>
+</html>

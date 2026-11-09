@@ -1,0 +1,823 @@
+/* ==========================================================================
+   HabitTracker - Sistema de Diseño y Estilos CSS3 Modernos (Fase 1 + Fase 2)
+   Enfoque: Look & Feel Fase 1, Bootstrap 5.3.8 (data-bs-theme), Contraste
+   WCAG 2.2 AA (>= 4.5:1), Foco Visible (:focus-visible) y Microinteracciones.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Variables CSS para Tema Claro (:root y [data-bs-theme="light"])
+   -------------------------------------------------------------------------- */
+:root,
+[data-bs-theme="light"] {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-contrast: #3730a3;
+  --primary-light: #eef2ff;
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --primary-glow: rgba(79, 70, 229, 0.22);
+
+  --emerald: #047857;
+  --emerald-light: #ecfdf5;
+  --amber: #b45309;
+  --amber-light: #fffbeb;
+  --rose: #b91c1c;
+  --rose-light: #fef2f2;
+
+  --bg-body: #f8fafc;
+  --bg-radial-1: rgba(99, 102, 241, 0.06);
+  --bg-radial-2: rgba(16, 185, 129, 0.05);
+  --surface: #ffffff;
+  --surface-hover: #f1f5f9;
+  --border-subtle: #e2e8f0;
+  --text-main: #0f172a;
+  --text-secondary: #334155; /* Contraste > 8.5:1 sobre #ffffff y #f8fafc */
+  --focus-ring: #3730a3;
+
+  --shadow-card:
+    0 10px 25px -5px rgba(15, 23, 42, 0.05),
+    0 8px 10px -6px rgba(15, 23, 42, 0.03);
+  --shadow-hover:
+    0 20px 30px -10px rgba(15, 23, 42, 0.08),
+    0 10px 15px -5px rgba(15, 23, 42, 0.04);
+
+  --filtros-bg: #e2e8f0;
+  --filtro-inactivo-text: #1e293b;
+  --filtro-activo-bg: #3730a3;
+  --filtro-activo-text: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   2. Variables CSS para Tema Oscuro ([data-bs-theme="dark"])
+   -------------------------------------------------------------------------- */
+[data-bs-theme="dark"] {
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-contrast: #4338ca;
+  --primary-light: rgba(99, 102, 241, 0.15);
+  --primary-gradient: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+  --primary-glow: rgba(99, 102, 241, 0.3);
+
+  --emerald: #047857;
+  --emerald-light: rgba(16, 185, 129, 0.15);
+  --amber: #fbbf24;
+  --amber-light: rgba(245, 158, 11, 0.15);
+  --rose: #dc2626;
+  --rose-light: rgba(239, 68, 68, 0.15);
+
+  --bg-body: #0f172a;
+  --bg-radial-1: rgba(99, 102, 241, 0.1);
+  --bg-radial-2: rgba(16, 185, 129, 0.07);
+  --surface: #1e293b;
+  --surface-hover: #334155;
+  --border-subtle: #334155;
+  --text-main: #f8fafc;
+  --text-secondary: #cbd5e1; /* Contraste > 8.5:1 sobre #0f172a y #1e293b */
+  --focus-ring: #818cf8;
+
+  --shadow-card:
+    0 10px 25px -5px rgba(2, 6, 23, 0.4),
+    0 8px 10px -6px rgba(2, 6, 23, 0.3);
+  --shadow-hover:
+    0 20px 30px -10px rgba(2, 6, 23, 0.55),
+    0 10px 15px -5px rgba(2, 6, 23, 0.4);
+
+  --filtros-bg: #334155;
+  --filtro-inactivo-text: #f8fafc;
+  --filtro-activo-bg: #4338ca;
+  --filtro-activo-text: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   3. Base, Fondo con Radial Gradients de Fase 1 y Foco Visible (:focus-visible)
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
+  line-height: 1.6;
+  background-color: var(--bg-body);
+  background-image:
+    radial-gradient(at 0% 0%, var(--bg-radial-1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, var(--bg-radial-2) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Contorno de foco visible 100% operable con teclado (Tab) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--focus-ring) !important;
+  outline-offset: 3px !important;
+  box-shadow: none !important;
+}
+
+.texto-secundario,
+.text-body-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.req {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+[data-bs-theme="dark"] .req {
+  color: #fca5a5;
+}
+
+/* --------------------------------------------------------------------------
+   4. Botones Rellenos con Contraste >= 4.5:1 (Sin clases btn-outline-*)
+   -------------------------------------------------------------------------- */
+.btn-primary {
+  background-color: var(--primary-contrast);
+  border-color: var(--primary-contrast);
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: #334155;
+  border-color: #334155;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: #1e293b;
+  border-color: #1e293b;
+  color: #ffffff;
+}
+
+[data-bs-theme="dark"] .btn-secondary {
+  background-color: #334155;
+  border-color: #475569;
+  color: #f8fafc;
+}
+
+[data-bs-theme="dark"] .btn-secondary:hover,
+[data-bs-theme="dark"] .btn-secondary:focus {
+  background-color: #475569;
+  border-color: #64748b;
+  color: #ffffff;
+}
+
+.btn-danger {
+  background-color: #b91c1c;
+  border-color: #b91c1c;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+.btn-danger:hover,
+.btn-danger:focus {
+  background-color: #991b1b;
+  border-color: #991b1b;
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   5. Cabecera y Marca (Look & Feel Fase 1)
+   -------------------------------------------------------------------------- */
+.app-header {
+  background-color: var(--surface);
+  border-color: var(--border-subtle) !important;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+}
+
+.brand-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--primary-gradient);
+  color: #ffffff;
+  box-shadow: 0 6px 16px -3px var(--primary-glow);
+}
+
+.brand-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.brand-title {
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.brand-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.icon-btn,
+.btn-icon,
+.h2-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.notif-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #fde047;
+  display: inline-block;
+}
+
+#btn-notificaciones.activas .notif-indicator {
+  background-color: #4ade80;
+}
+
+#btn-notificaciones.bloqueadas .notif-indicator {
+  background-color: #fca5a5;
+}
+
+/* --------------------------------------------------------------------------
+   6. Tarjetas (.card) y Métricas Superiores (Look & Feel Fase 1)
+   -------------------------------------------------------------------------- */
+.card {
+  background-color: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card) !important;
+  transition:
+    transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover) !important;
+}
+
+.stat-label {
+  font-size: 0.76rem;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.stat-number {
+  font-size: 1.9rem;
+  color: var(--text-main);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.stat-subtext {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Íconos de métricas estilo caja suave redondeada (38px x 38px, border-radius: 12px) */
+.stat-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Progreso Diario */
+.icon-emerald {
+  background-color: #ecfdf5;
+  color: #047857;
+}
+
+[data-bs-theme="dark"] .icon-emerald {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+/* Racha Activa */
+.icon-amber {
+  background-color: #fffbeb;
+  color: #b45309;
+}
+
+[data-bs-theme="dark"] .icon-amber {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+/* Total Hábitos */
+.icon-indigo {
+  background-color: #eef2ff;
+  color: #4f46e5;
+}
+
+[data-bs-theme="dark"] .icon-indigo {
+  background-color: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+
+.progress-track {
+  height: 10px;
+  border-radius: 9999px;
+  background-color: var(--surface-hover);
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+  border-radius: 9999px;
+  transition: width 0.35s ease;
+}
+
+/* --------------------------------------------------------------------------
+   7. Aside del Consejo de Productividad (Degradado Suave Fase 1)
+   -------------------------------------------------------------------------- */
+.aside-consejo {
+  background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%);
+  border: 1px solid #c7d2fe;
+  border-radius: 16px;
+}
+
+[data-bs-theme="dark"] .aside-consejo {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  border: 1px solid #4338ca;
+}
+
+.consejo-titulo {
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: #3730a3;
+}
+
+[data-bs-theme="dark"] .consejo-titulo {
+  color: #c7d2fe;
+}
+
+.consejo-texto {
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: #1e1b4b;
+}
+
+[data-bs-theme="dark"] .consejo-texto {
+  color: #f8fafc;
+}
+
+/* --------------------------------------------------------------------------
+   8. Tarjeta "Tu Perfil Diario" y Aviso de Privacidad Discreto
+   -------------------------------------------------------------------------- */
+.badge-visitas {
+  background-color: #eef2ff;
+  color: #312e81; /* Contraste > 9:1 */
+  border: 1px solid #c7d2fe;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4em 0.8em;
+  border-radius: 9999px;
+}
+
+[data-bs-theme="dark"] .badge-visitas {
+  background-color: #312e81;
+  color: #e0e7ff;
+  border-color: #4338ca;
+}
+
+.saludo-protagonista {
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46; /* Contraste > 7:1 */
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+[data-bs-theme="dark"] .saludo-protagonista {
+  background-color: rgba(16, 185, 129, 0.14);
+  border-color: rgba(52, 211, 153, 0.35);
+  color: #ecfdf5;
+}
+
+.privacidad-box {
+  border-color: var(--border-subtle) !important;
+}
+
+.aviso-privacidad {
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+/* Controles de formulario estilizados */
+.form-control,
+.form-select {
+  border-radius: 10px;
+  border-color: var(--border-subtle);
+  background-color: var(--surface);
+  color: var(--text-main);
+}
+
+/* --------------------------------------------------------------------------
+   9. Filtros Tipo Píldora (Segmented Control)
+   -------------------------------------------------------------------------- */
+.filtros-container {
+  background-color: var(--filtros-bg);
+  padding: 4px;
+  border-radius: 9999px;
+}
+
+.filtro-btn {
+  border: none;
+  background-color: transparent;
+  color: var(--filtro-inactivo-text);
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.42rem 0.95rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.filtro-btn:hover {
+  background-color: rgba(15, 23, 42, 0.06);
+}
+
+[data-bs-theme="dark"] .filtro-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.filtro-btn.activo {
+  background-color: var(--filtro-activo-bg);
+  color: var(--filtro-activo-text);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
+}
+
+.contador-badge {
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.12rem 0.48rem;
+  border-radius: 9999px;
+  background-color: rgba(15, 23, 42, 0.12);
+  color: inherit;
+}
+
+[data-bs-theme="dark"] .contador-badge {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
+.filtro-btn.activo .contador-badge {
+  background-color: rgba(255, 255, 255, 0.24);
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   10. Tarjetas de Hábitos (.card-habito), Check Circular y Badges Píldora
+   -------------------------------------------------------------------------- */
+.card-habito {
+  border-radius: 16px;
+}
+
+.card-habito:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover) !important;
+}
+
+.card-habito.completado {
+  border-left: 4px solid #047857;
+}
+
+[data-bs-theme="dark"] .card-habito.completado {
+  border-left: 4px solid #10b981;
+}
+
+/* Botón de check circular (34px x 34px, border-radius: 50%) */
+.btn-toggle-check {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #4f46e5;
+  background-color: var(--surface);
+  color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+[data-bs-theme="dark"] .btn-toggle-check {
+  border-color: #818cf8;
+}
+
+.btn-toggle-check:hover {
+  background-color: var(--primary-light);
+  color: #4338ca;
+}
+
+[data-bs-theme="dark"] .btn-toggle-check:hover {
+  color: #c7d2fe;
+}
+
+.btn-toggle-check svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* Estado completado: relleno verde esmeralda (#047857) con check blanco */
+.card-habito.completado .btn-toggle-check {
+  background-color: #047857;
+  border-color: #047857;
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.18);
+}
+
+.habito-titulo {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text-main);
+  word-break: break-word;
+}
+
+.card-habito.completado .habito-titulo {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+}
+
+/* Badges tipo píldora (border-radius: 9999px) con fondo suave y alto contraste >= 4.5:1 */
+.badge-categoria {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: capitalize;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.badge-salud {
+  background-color: #e0f2fe;
+  color: #0c4a6e; /* Contraste 8.4:1 */
+}
+
+.badge-mente {
+  background-color: #ede9fe;
+  color: #4c1d95; /* Contraste 8.9:1 */
+}
+
+.badge-productividad {
+  background-color: #fef3c7;
+  color: #78350f; /* Contraste 8.1:1 */
+}
+
+.badge-deporte {
+  background-color: #dcfce7;
+  color: #14532d; /* Contraste 8.7:1 */
+}
+
+.badge-finanzas {
+  background-color: #d1fae5;
+  color: #064e3b; /* Contraste 8.6:1 */
+}
+
+.badge-general {
+  background-color: #e2e8f0;
+  color: #1e293b; /* Contraste 11.2:1 */
+}
+
+[data-bs-theme="dark"] .badge-salud {
+  background-color: #0c4a6e;
+  color: #e0f2fe;
+}
+
+[data-bs-theme="dark"] .badge-mente {
+  background-color: #4c1d95;
+  color: #ede9fe;
+}
+
+[data-bs-theme="dark"] .badge-productividad {
+  background-color: #78350f;
+  color: #fef3c7;
+}
+
+[data-bs-theme="dark"] .badge-deporte {
+  background-color: #14532d;
+  color: #dcfce7;
+}
+
+[data-bs-theme="dark"] .badge-finanzas {
+  background-color: #064e3b;
+  color: #d1fae5;
+}
+
+[data-bs-theme="dark"] .badge-general {
+  background-color: #334155;
+  color: #f8fafc;
+}
+
+.badge-hora {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background-color: var(--surface-hover);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.58rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.badge-racha {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background-color: #fffbeb;
+  color: #92400e; /* Contraste > 6.5:1 */
+  border: 1px solid #fde68a;
+  padding: 0.18rem 0.58rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+}
+
+[data-bs-theme="dark"] .badge-racha {
+  background-color: #78350f;
+  color: #fef3c7;
+  border-color: #92400e;
+}
+
+/* Botón de eliminar limpio y discreto (contraste >= 4.5:1) que resalta en rojo al pasar el mouse */
+.btn-eliminar-habito {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--surface-hover);
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.btn-eliminar-habito:hover,
+.btn-eliminar-habito:focus-visible {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+[data-bs-theme="dark"] .btn-eliminar-habito:hover,
+[data-bs-theme="dark"] .btn-eliminar-habito:focus-visible {
+  background-color: #991b1b;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+.btn-eliminar-habito svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* Estado vacío */
+.estado-vacio-icono {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.estado-vacio-icono svg {
+  width: 30px;
+  height: 30px;
+}
+
+/* Footer */
+.app-footer {
+  background-color: var(--surface);
+  border-color: var(--border-subtle) !important;
+}
+
+.badge-universidad {
+  background-color: var(--primary-contrast);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.4em 0.85em;
+  border-radius: 9999px;
+}
+
+/* --------------------------------------------------------------------------
+   11. Sistema de Avisos Flotantes (Toasts)
+   -------------------------------------------------------------------------- */
+.contenedor-toasts {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 1080;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: min(92vw, 380px);
+}
+
+.toast-custom {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  background-color: #0f172a;
+  color: #ffffff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  border-left: 5px solid #6366f1;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+
+.toast-custom.toast-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-custom.toast-success {
+  border-left-color: #10b981;
+}
+
+.toast-custom.toast-warning {
+  border-left-color: #f59e0b;
+}
+
+.toast-icono-wrap {
+  font-weight: 700;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+}
+
+.toast-texto {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   12. Respeto a Preferencias de Movimiento Reducido (Accesibilidad WCAG)
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

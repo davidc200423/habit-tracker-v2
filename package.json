@@ -1,0 +1,27 @@
+{
+  "name": "habittracker-fase2",
+  "version": "2.0.0",
+  "description": "Rastreador de Hábitos con Recordatorios Nativos, API REST en Express, Persistencia Web y Bootstrap 5.3.8 (Fase 2)",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "habitos",
+    "express",
+    "rest-api",
+    "bootstrap",
+    "accesibilidad",
+    "wcag",
+    "notifications-api"
+  ],
+  "author": "Unisangil - Ingeniería de Sistemas",
+  "license": "MIT",
+  "dependencies": {
+    "compression": "^1.7.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

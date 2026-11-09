@@ -1,0 +1,40 @@
+{
+  "mensaje": "Datos iniciales de hábitos y consejos de productividad (Respaldo local)",
+  "version": "2.0.0",
+  "consejos": [
+    "La constancia de 5 minutos al día supera a la intensidad esporádica.",
+    "Beber un vaso de agua al despertar activa tu metabolismo y mente.",
+    "Divide tus metas grandes en micro-hábitos fáciles de cumplir.",
+    "El mejor momento para registrar tu progreso es justo después de completar la acción.",
+    "Agrupa un hábito nuevo junto a uno que ya realizas automáticamente cada mañana."
+  ],
+  "habitosSugeridos": [
+    {
+      "id": "habito-1",
+      "nombre": "Beber 2 litros de agua",
+      "categoria": "salud",
+      "hora": "08:30",
+      "completado": true,
+      "racha": 5,
+      "fechaCreacion": "2026-09-01T08:00:00.000Z"
+    },
+    {
+      "id": "habito-2",
+      "nombre": "Leer 20 páginas de un libro",
+      "categoria": "mente",
+      "hora": "21:00",
+      "completado": false,
+      "racha": 3,
+      "fechaCreacion": "2026-09-02T12:00:00.000Z"
+    },
+    {
+      "id": "habito-3",
+      "nombre": "Caminar o trotar 30 minutos",
+      "categoria": "deporte",
+      "hora": "07:00",
+      "completado": false,
+      "racha": 2,
+      "fechaCreacion": "2026-09-03T07:00:00.000Z"
+    }
+  ]
+}
